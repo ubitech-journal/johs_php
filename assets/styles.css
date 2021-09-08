@@ -1,0 +1,65 @@
+html,
+body {
+	height: 100%;
+}
+body {
+	margin: 0;
+	font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+}
+
+button:focus {
+	outline: 0px dotted !important;
+	outline: 0px auto -webkit-focus-ring-color !important;
+}
+
+:focus {
+	outline: -webkit-focus-ring-color auto 0px !important;
+}
+
+.bg-c {
+	background-color: #2341aa;
+}
+
+.text-c {
+	color: #2341aa;
+}
+
+.font-normal {
+	font-weight: 500;
+}
+
+.cursor {
+	cursor: pointer !important;
+}
+.bg-image {
+	background: linear-gradient(to right, rgb(1 57 144), rgb(16 112 222 / 0%)),
+		url(/assets/images/Cloud-HP_Leadspace@2x.webp) !important;
+	background-size: 100% 100% !important;
+}
+
+.mat-menu-panel {
+	background: #fff;
+	backdrop-filter: blur(10px);
+	background-color: rgb(255 255 255 / 55%);
+}
+
+.mt-lg-425 {
+	margin-top: 2.5rem !important;
+}
+.pt-lg-25 {
+	padding-top: 2.5rem !important;
+}
+
+div[class] > div > p > img {
+	width: 100%;
+	height: auto;
+}
+
+@media (min-width: 992px) {
+	.mt-lg-425 {
+		margin-top: 4.25rem !important;
+	}
+	.pt-lg-25 {
+		padding-top: 2.5rem !important;
+	}
+}

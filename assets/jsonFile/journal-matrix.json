@@ -1,0 +1,24 @@
+{
+    "journalMatrix": [
+        {
+            "name": "Acceptance rate",
+            "value": "80%"
+        },
+        {
+            "name": "Submission to final decision",
+            "value": "14 days"
+        },
+        {
+            "name": "Acceptance to publication",
+            "value": "30 days"
+        },
+        {
+            "name": "CiteScore",
+            "value": ""
+        },
+        {
+            "name": "Impact Factor",
+            "value": ""
+        }
+    ]
+}
