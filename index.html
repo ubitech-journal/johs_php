@@ -21,7 +21,10 @@
 		/>
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"
+		/>
 		<link rel="icon" type="image/x-icon" href="favicon.ico" />
 		<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
 		<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
@@ -31,9 +34,9 @@
 			href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
 			rel="stylesheet"
 		/>
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
 		<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.4/css/all.css" />
 		<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
 		<script src="assets/include.js"></script>
 		<style>
 			.blue-colour {
@@ -85,20 +88,21 @@
 				display: -ms-flexbox;
 				display: -webkit-flex;
 				display: flex;
-				-webkit-box-pack: left;
-				-ms-flex-pack: left;
-				-webkit-justify-content: left;
-				justify-content: left;
-				-webkit-box-align: left;
-				-ms-flex-align: left;
-				-webkit-align-items: left;
-				align-items: left;
+				-webkit-box-pack: start;
+				-ms-flex-pack: start;
+				-webkit-justify-content: start;
+				justify-content: start;
+				-webkit-box-align: start;
+				-ms-flex-align: start;
+				-webkit-align-items: start;
+				align-items: start;
 			}
 
 			.swiper-slide img {
 				display: block;
 				width: 100% !important;
 				height: 200px !important;
+				object-fit: contain;
 			}
 		</style>
 	</head>
@@ -283,14 +287,43 @@
 		<div include-html="footer.html"></div>
 
 		<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+		<script type="text/javascript">
+			window.onscroll = function () {
+				// Swiper
+				const swiper = new Swiper('.mySwiper', {
+					navigation: {
+						nextEl: '.swiper-button-next',
+						prevEl: '.swiper-button-prev',
+					},
+				});
 
-		<script>
-			const date = new Date();
-			document.getElementById('date').innerHTML = date.getFullYear();
+				const swipers = new Swiper('.mySwipers', {
+					slidesPerView: 1,
+					spaceBetween: 10,
+					breakpoints: {
+						'@0.00': {
+							slidesPerView: 1,
+						},
+						'@0.75': {
+							slidesPerView: 2,
+						},
+						'@1.00': {
+							slidesPerView: 3,
+						},
+						'@1.50': {
+							slidesPerView: 4,
+						},
+					},
+					navigation: {
+						nextEl: '.swiper-button-next',
+						prevEl: '.swiper-button-prev',
+					},
+				});
+			};
 		</script>
-		<script>
+		<script src="assets/fetch.js"></script>
+		<script type="text/javascript">
 			includeHTML();
-
 			function showText(event) {
 				if (document.getElementById('limitTextHeight').classList.contains('limitTextHeight')) {
 					document.getElementById('limitTextHeight').classList.remove('limitTextHeight');
@@ -300,327 +333,66 @@
 					document.getElementById('read_more').innerHTML = 'Read More';
 				}
 			}
+			window.onload = function () {
+				document.getElementById('date').innerHTML = new Date().getFullYear();
 
-			// Announcements
+				// Announcements
+				const announcements = 'api/news.php';
+				announcement(announcements);
 
-			const announcements = 'api/news.php';
-			announcement(announcements);
-			async function announcement(url) {
-				// Storing response
-				const response = await fetch(url);
-				// Storing data in form of JSON
-				let tab = '';
-				let data = await response.json();
-				for (let r of data.getNews) {
-					tab += `<li>${r.news_desc}</li>`;
+				// Journal Matrix
+				const journalMatrix = [
+					{
+						name: 'Acceptance rate',
+						value: '80%',
+					},
+					{
+						name: 'Submission to final decision',
+						value: '14 days',
+					},
+					{
+						name: 'Acceptance to publication',
+						value: '30 days',
+					},
+					{
+						name: 'CiteScore',
+						value: '',
+					},
+					{
+						name: 'Impact Factor',
+						value: '',
+					},
+				];
+				let Matrix = '';
+				for (let r of journalMatrix) {
+					Matrix += `<div class="col-9 px-1 mb-2">${r.name}</div><div class="col-3 px-1 mb-2 fw-bold">${r.value}</div>`;
 				}
-				// Setting innerHTML as tab variable
-				document.getElementById('announcement').innerHTML = tab;
-			}
+				document.getElementById('journalMatrix').innerHTML = Matrix;
 
-			// Journal Matrix
+				// Editor Choice
+				const editor_Choice = 'api/getEditorsChoice.php?getEditorsChoice';
+				editorChoice(editor_Choice);
 
-			const journalMatrix = [
-				{
-					name: 'Acceptance rate',
-					value: '80%',
-				},
-				{
-					name: 'Submission to final decision',
-					value: '14 days',
-				},
-				{
-					name: 'Acceptance to publication',
-					value: '30 days',
-				},
-				{
-					name: 'CiteScore',
-					value: '',
-				},
-				{
-					name: 'Impact Factor',
-					value: '',
-				},
-			];
-			let Matrix = '';
-			for (let r of journalMatrix) {
-				Matrix += `<div class="col-9 px-1 mb-2">${r.name}</div><div class="col-3 px-1 mb-2 fw-bold">${r.value}</div>`;
-			}
-			document.getElementById('journalMatrix').innerHTML = Matrix;
+				// Current Articles
+				const current_issue = 'api/current.php?currentIssueArticle';
+				currentIssue(current_issue);
 
-			// Editor Choice
-			const editor_Choice = 'api/getEditorsChoice.php?getEditorsChoice';
-			editorChoice(editor_Choice);
-			async function editorChoice(url) {
-				// Storing response
-				const response = await fetch(url);
-				// Storing data in form of JSON
-				let data = await response.json();
-				if (data.getEditorChoice != '') {
-					let tab = `<h5 class="py-1 blue-colour fw-bold mt-lg-0 mt-3">Editor Choice</h5>
-									<div class="card card-body">
-										<div class="swiper mySwiper" style="height: 270px">
-											<div class="swiper-wrapper">`;
-					for (let r of data.getEditorChoice) {
-						let image = r.fileimage
-							? 'https://www.johs.com.sa/admin/public/uploadss/187/' + r.fileimage
-							: 'assets/images/capture.png';
-						tab += `<div class="swiper-slide">
-										<a href="abstract.php?id=${r.article_id}" class="text-decoration-none text-dark" >
-											<div class="row">
-												<div class="col-lg-6 col-sm-12 col-md-12 text-center">
-													<img
-														src="${image}"
-														class="img-fluid"
-													/>
-												</div>
-												<div class="col-lg-6 col-sm-12">
-													<div class="fw-bold">${r.title}</div>
-													<div class="text-justify mt-2" >${r.authors}</div>
-												</div>
-											</div>
-										</a>
-									</div>`;
-					}
-					tab += `</div>
-									<div class="swiper-button-next text-dark h2"></div>
-									<div class="swiper-button-prev text-dark h2"></div>
-								</div>
-							</div>`;
-					// Setting innerHTML as tab variable
-					document.getElementById('editorChoice').innerHTML = tab;
-				}
-			}
+				// Trending Articles
+				const trending_articles = 'api/trending_articles.php?getTrending_articles';
+				trendingArticles(trending_articles);
 
-			// Current Articles
+				// Most Viewed Articles
+				const Most_view = 'api/most_viewed_api.php?getMostViewArticleApi';
+				mostView(Most_view);
 
-			const current_issue = 'api/current.php?currentIssueArticle';
-			currentIssue(current_issue);
-			async function currentIssue(url) {
-				// Storing response
-				const response = await fetch(url);
-				// Storing data in form of JSON
-				let data = await response.json();
-				if (data.currentIssueArticle != '') {
-					let tab = `<div class="conatainer-fluid">
-									<div class="card border-0 bglight">
-										<div class="border-0 d-flex justify-content-between px-5 mt-4">
-											<h5 class="blue-colour fw-bold">Current Issue</h5>
-											<a href="" class="card-link">Show All</a>
-										</div>
-										<div class="card-body py-0">
-											<div class="swiper mySwipers">
-												<div class="swiper-wrapper">`;
-					for (let r of data.currentIssueArticle) {
-						let image = r.fileimage
-							? 'https://www.johs.com.sa/admin/public/uploadss/187/' + r.fileimage
-							: 'assets/images/capture.png';
-						tab += `<div class="swiper-slide" style="background: none;">
-									<a href="abstract.php?id=${r.article_id}" class="text-decoration-none text-dark">
-										<div class="card mx-3 mb-2">
-											<img src="${image}" class="card-img-top p-4" alt="Saudi Medical Journal" />
-											<div class="card-body">
-												<div class="fw-bold">${r.title}</div>
-												<div class="text-justify mt-2" >${r.authors}</div>
-											</div>
-										</div>
-									</a>
-								</div>`;
-					}
-					tab += `</div>
-								<div class="swiper-button-next"></div>
-								<div class="swiper-button-prev"></div>
-									</div>
-								</div>
-							</div>
-						</div>`;
-					// Setting innerHTML as tab variable
-					document.getElementById('currentIssue').innerHTML = tab;
-				}
-			}
+				// Advertisements
+				const advertisements = 'api/Advbanner.php?adbannerid';
+				advertisement(advertisements);
 
-			// Trending Articles
-
-			const trending_articles = 'api/trending_articles.php?getTrending_articles';
-			trendingArticles(trending_articles);
-			async function trendingArticles(url) {
-				// Storing response
-				const response = await fetch(url);
-				// Storing data in form of JSON
-				let data = await response.json();
-				if (data.getTrending_articles != '') {
-					let tab = `<div class="conatainer-fluid">
-									<div class="card border-0">
-										<div class="border-0 d-flex justify-content-between px-5 mt-4">
-											<h5 class="blue-colour fw-bold">Trending</h5>
-										</div>
-										<div class="card-body py-0">
-											<div class="swiper mySwipers">
-												<div class="swiper-wrapper">`;
-					for (let r of data.getTrending_articles) {
-						let image = r.fileimage
-							? 'https://www.johs.com.sa/admin/public/uploadss/187/' + r.fileimage
-							: 'assets/images/capture.png';
-						tab += `<div class="swiper-slide" style="background: none;">
-									<a href="abstract.php?id=${r.article_id}" class="text-decoration-none text-dark">
-										<div class="card mx-3 mb-2">
-											<img src="${image}" class="card-img-top p-4" alt="Saudi Medical Journal" />
-											<div class="card-body">
-												<div class="fw-bold">${r.title}</div>
-												<div class="text-justify mt-2" >${r.authors}</div>
-											</div>
-										</div>
-									</a>
-								</div>`;
-					}
-					tab += `</div>
-								<div class="swiper-button-next"></div>
-								<div class="swiper-button-prev"></div>
-									</div>
-								</div>
-							</div>
-						</div>`;
-					// Setting innerHTML as tab variable
-					document.getElementById('trendingArticles').innerHTML = tab;
-				}
-			}
-
-			// Most Viewed Articles
-
-			const Most_view = 'api/most_viewed_api.php?getMostViewArticleApi';
-			mostView(Most_view);
-			async function mostView(url) {
-				// Storing response
-				const response = await fetch(url);
-				// Storing data in form of JSON
-				let data = await response.json();
-				if (data.getMostViewArticleApi != '') {
-					let tab = `<div class="conatainer-fluid">
-									<div class="card border-0 bglight">
-										<div class="border-0 d-flex justify-content-between px-5 mt-4">
-											<h5 class="blue-colour fw-bold">Most Viewed</h5>
-										</div>
-										<div class="card-body py-0">
-											<div class="swiper mySwipers">
-												<div class="swiper-wrapper">`;
-					for (let r of data.getMostViewArticleApi) {
-						let image = r.fileimage
-							? 'https://www.johs.com.sa/admin/public/uploadss/187/' + r.fileimage
-							: 'assets/images/capture.png';
-						tab += `<div class="swiper-slide" style="background: none;">
-									<a href="abstract.php?id=${r.article_id}" class="text-decoration-none text-dark">
-										<div class="card mx-3 mb-2">
-											<img src="${image}" class="card-img-top p-4" alt="Saudi Medical Journal" />
-											<div class="card-body">
-												<div class="fw-bold">${r.title}</div>
-												<div class="text-justify mt-2" >${r.authors}</div>
-											</div>
-										</div>
-									</a>
-								</div>`;
-					}
-					tab += `</div>
-								<div class="swiper-button-next"></div>
-								<div class="swiper-button-prev"></div>
-									</div>
-								</div>
-							</div>
-						</div>`;
-					// Setting innerHTML as tab variable
-					document.getElementById('mostView').innerHTML = tab;
-				}
-			}
-
-			// Advertisements
-
-			const advertisements = 'api/Advbanner.php?adbannerid';
-			advertisement(advertisements);
-			async function advertisement(url) {
-				const response = await fetch(url);
-				let data = await response.json();
-				if (data.adbannerid != '') {
-					let tab = `<div class="swiper mySwiper">
-								<div class="swiper-wrapper">`;
-					for (let r of data.adbannerid) {
-						tab += `<div class="swiper-slide">
-									<div>${r.name}</div>
-								</div>`;
-					}
-					tab += `</div>
-								<div class="swiper-button-next text-white h2"></div>
-								<div class="swiper-button-prev text-white h2"></div>
-							</div>
-						</div>`;
-					// Setting innerHTML as tab variable
-					document.getElementById('advertisement').innerHTML = tab;
-				}
-			}
-
-			// Journal Statistics
-
-			const journal_statistics = 'api/journal-statistics.php?getArticlesCount';
-			journalStatistics(journal_statistics);
-			async function journalStatistics(url) {
-				const response = await fetch(url);
-				let data = await response.json();
-				document.getElementById('getSubmittedArticlesCount').innerHTML =
-					data.getArticlesCount[0].total_countSA;
-				document.getElementById('getPublishedArticlesCount').innerHTML =
-					data.getArticlesCount[1].total_countPA;
-				document.getElementById('getTotalDownloads').innerHTML =
-					data.getArticlesCount[2].total_countTD;
-			}
-
-			// Swiper
-
-			var swiper = new Swiper('.mySwiper', {
-				pagination: { el: '.swiper-pagination', clickable: true },
-				autoHeight: true,
-				allowTouchMove: true,
-				breakpoints: {
-					1024: {
-						slidesPerView: 1,
-					},
-					500: {
-						slidesPerView: 1,
-					},
-					400: {
-						slidesPerView: 1,
-					},
-					300: {
-						slidesPerView: 1,
-					},
-				},
-				navigation: {
-					nextEl: '.swiper-button-next',
-					prevEl: '.swiper-button-prev',
-				},
-				loop: false,
-			});
-
-			var swiper = new Swiper('.mySwipers', {
-				autoHeight: true,
-				allowTouchMove: true,
-				breakpoints: {
-					1024: {
-						slidesPerView: 4,
-					},
-					500: {
-						slidesPerView: 3,
-					},
-					400: {
-						slidesPerView: 2,
-					},
-					300: {
-						slidesPerView: 1,
-					},
-				},
-				navigation: {
-					nextEl: '.swiper-button-next',
-					prevEl: '.swiper-button-prev',
-				},
-				loop: false,
-			});
+				// Journal Statistics
+				const journal_statistics = 'api/journal-statistics.php?getArticlesCount';
+				journalStatistics(journal_statistics);
+			};
 		</script>
 	</body>
 </html>
