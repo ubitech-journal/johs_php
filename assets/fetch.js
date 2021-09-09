@@ -73,7 +73,7 @@ async function currentIssue(url) {
                 : 'assets/images/capture.png';
             tab += `<div class="swiper-slide" style="background: none;">
                         <a href="abstract.php?id=${r.article_id}" class="text-decoration-none text-dark">
-                            <div class="card mx-3 mb-2">
+                            <div class="card mx-3 mb-2" style="height: 400px">
                                 <img src="${image}" class="card-img-top p-4" alt="Saudi Medical Journal" />
                                 <div class="card-body">
                                     <div class="fw-bold">${r.title}</div>
@@ -115,7 +115,7 @@ async function trendingArticles(url) {
                 : 'assets/images/capture.png';
             tab += `<div class="swiper-slide" style="background: none;">
                         <a href="abstract.php?id=${r.article_id}" class="text-decoration-none text-dark">
-                            <div class="card mx-3 mb-2">
+                            <div class="card mx-3 mb-2" style="height: 400px">
                                 <img src="${image}" class="card-img-top p-4" alt="Saudi Medical Journal" />
                                 <div class="card-body">
                                     <div class="fw-bold">${r.title}</div>
@@ -157,7 +157,7 @@ async function mostView(url) {
                 : 'assets/images/capture.png';
             tab += `<div class="swiper-slide" style="background: none;">
                         <a href="abstract.php?id=${r.article_id}" class="text-decoration-none text-dark">
-                            <div class="card mx-3 mb-2">
+                            <div class="card mx-3 mb-2" style="height: 400px">
                                 <img src="${image}" class="card-img-top p-4" alt="Saudi Medical Journal" />
                                 <div class="card-body">
                                     <div class="fw-bold">${r.title}</div>
